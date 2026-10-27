@@ -1,0 +1,40 @@
+# Python 3.14 (tested). Install:  pip install -r requirements.txt
+# CPU-only torch (smaller download) - install it first:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# ---- PDF extraction (ingestion_pipeline_docling.py) ----
+docling==2.130.0
+docling-core==2.98.0
+torch==2.14.0
+torchvision==0.29.0
+pillow==12.3.0
+
+# ---- Embeddings + vector DB (retrieval_pipeline_pdf.py) ----
+chromadb==1.5.9
+langchain-chroma==1.1.0
+langchain-huggingface==1.2.2
+sentence-transformers==6.0.1
+
+# ---- LLM: Ollama llama3 (answer_generation_pdf.py) ----
+langchain==1.4.0
+langchain-core==1.6.3
+langchain-ollama==1.1.0
+
+# ---- Web app (app.py) ----
+fastapi==0.141.1
+uvicorn==0.52.4
+python-multipart==0.0.32
+pydantic==2.13.5
+
+# ---- Config ----
+python-dotenv==1.2.3
+
+# ---- Older scripts (ingestion_pipeline_pdf.py, text-file pipeline, splitter demos) ----
+# Remove this block if you only use the Docling PDF pipeline.
+pymupdf==1.28.2
+langchain-community==0.4.2
+langchain-text-splitters==1.1.2
+langchain-experimental==0.4.2
+langchain-openai==1.6.2
+openai==3.13.0
+numpy==2.5.3

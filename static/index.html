@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF RAG Assistant</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◧</span>
+      <span>Document Intelligence</span>
+    </div>
+    <div class="stats" id="stats">No documents yet</div>
+  </header>
+
+  <div class="layout">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <label class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept="application/pdf,.pdf" multiple hidden>
+        <div class="dz-icon">⇪</div>
+        <div class="dz-title">Drop PDFs here</div>
+        <div class="dz-sub">or click to browse · max 50 MB</div>
+      </label>
+
+      <div id="jobs"></div>
+
+      <div class="section-title">
+        Documents
+        <a class="link" href="/api/chunks" download="chunks.json" title="Download every chunk as JSON">all chunks.json ⤓</a>
+      </div>
+      <ul class="doc-list" id="docList">
+        <li class="empty">Upload a PDF to get started.</li>
+      </ul>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+      <nav class="tabs">
+        <button class="tab active" data-tab="ask">Ask</button>
+        <button class="tab" data-tab="chunks">Chunks (JSON)</button>
+        <button class="tab" data-tab="items">Extracted layout</button>
+      </nav>
+
+      <!-- ASK -->
+      <section class="panel active" id="panel-ask">
+        <div class="chat" id="chat">
+          <div class="chat-empty">
+            <h2>Ask your documents</h2>
+            <p>Uploaded PDFs are split into section-aware chunks, embedded, and stored in a Chroma vector DB.
+               Questions are answered from the most relevant chunks, with citations.</p>
+          </div>
+        </div>
+        <form class="ask-bar" id="askForm">
+          <select id="chunkType" title="Search only this kind of chunk">
+            <option value="">All chunks</option>
+            <option value="text">Text</option>
+            <option value="table">Tables</option>
+            <option value="figure">Figures</option>
+          </select>
+          <select id="topK" title="Number of chunks to retrieve">
+            <option value="1" selected>k=1</option>
+            <option value="3">k=3</option>
+            <option value="5">k=5</option>
+            <option value="8">k=8</option>
+          </select>
+          <input id="question" type="text" placeholder="Ask a question about your PDFs…" autocomplete="off">
+          <button type="submit" class="primary" id="askBtn">Ask</button>
+          <button type="button" class="ghost" id="resetBtn" title="Clear conversation">Clear</button>
+        </form>
+      </section>
+
+      <!-- CHUNKS -->
+      <section class="panel" id="panel-chunks">
+        <div class="panel-head">
+          <div>
+            <h2 id="chunksTitle">Select a document</h2>
+            <div class="muted" id="chunksMeta"></div>
+          </div>
+          <div class="controls">
+            <select id="chunkFilter">
+              <option value="">All types</option>
+              <option value="text">Text</option>
+              <option value="table">Tables</option>
+              <option value="figure">Figures</option>
+            </select>
+            <input id="chunkSearch" type="search" placeholder="Filter text…">
+            <button class="ghost" id="viewToggle">Raw JSON</button>
+            <button class="primary" id="downloadChunks" disabled>Download JSON</button>
+          </div>
+        </div>
+        <div id="chunksBody" class="cards"></div>
+        <pre id="chunksJson" class="json" hidden></pre>
+      </section>
+
+      <!-- ITEMS -->
+      <section class="panel" id="panel-items">
+        <div class="panel-head">
+          <div>
+            <h2 id="itemsTitle">Select a document</h2>
+            <div class="muted" id="itemsMeta"></div>
+          </div>
+        </div>
+        <div id="itemsBody" class="items"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
